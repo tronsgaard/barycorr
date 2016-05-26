@@ -24,11 +24,9 @@ See also:
 
 Download barycorr.py to a directory of choice.
 
-The following packages are required: 
+The following packages are required (available in PyPI): 
 - [`numpy`](http://www.numpy.org/)
 - [`requests`](http://python-requests.org)
-
-Both are available through PyPI.
 
 ## Usage example
 
