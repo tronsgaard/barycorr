@@ -28,7 +28,7 @@ See also:
     http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 """
 
-__version__ = '1.0'
+__version__ = '1.1'
 __all__ = ['bvc', 'utc2bjd', 'bjd2utc']
 
 # Speed of light
@@ -68,7 +68,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
 
     # Prepare GET parameters
     params = {
-        'JDS': ','.join(map(str, jd_utc)),
+        'JDS': ','.join(map(repr, jd_utc)),
         'RA': ra,
         'DEC': dec,
         'PMRA': pmra,
@@ -122,7 +122,7 @@ def utc2bjd(jd_utc, ra, dec):
 
     # Prepare GET parameters
     params = {
-        'JDS': ','.join(map(str, jd_utc)),
+        'JDS': ','.join(map(repr, jd_utc)),
         'RA': ra,
         'DEC': dec,
         'FUNCTION': 'utc2bjd'
@@ -155,7 +155,7 @@ def bjd2utc(bjd_tdb, ra, dec):
 
     # Prepare GET parameters
     params = {
-        'JDS': ','.join(map(str, bjd_tdb)),
+        'JDS': ','.join(map(repr, bjd_tdb)),
         'RA': ra,
         'DEC': dec,
         'FUNCTION': 'bjd2utc'
