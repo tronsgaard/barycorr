@@ -28,6 +28,8 @@ The following packages are required:
 - [`numpy`](http://www.numpy.org/)
 - [`requests`](http://python-requests.org)
 
+Both are available through PyPI.
+
 ## Usage example
 
 ```python
