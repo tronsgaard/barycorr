@@ -20,7 +20,12 @@ The Python interface is written by René Tronsgaard (Aarhus University) and may
 be used, modified or redistributed without restrictions. However, please do not
 remove this message.
 
-See also: http://astroutils.astronomy.ohio-state.edu/
+More info: http://github.com/tronsgaard/barycorr
+
+See also: 
+    http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.html
+    http://astroutils.astronomy.ohio-state.edu/time/utc2bjd.html
+    http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 """
 
 __version__ = '1.0'
