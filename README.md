@@ -15,7 +15,10 @@ corresponding paper:
 The Python interface is written by René Tronsgaard (Aarhus University) and may
 be used, modified or redistributed without restrictions.
 
-See also: http://astroutils.astronomy.ohio-state.edu/
+See also: 
+- http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.html
+- http://astroutils.astronomy.ohio-state.edu/time/utc2bjd.html
+- http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 
 ## Installation
 
