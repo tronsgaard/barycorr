@@ -28,7 +28,7 @@ See also:
     http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 """
 
-__version__ = '1.1'
+__version__ = '1.2'
 __all__ = ['bvc', 'utc2bjd', 'bjd2utc']
 
 # Speed of light
@@ -37,7 +37,7 @@ _c = 299792458.
 
 def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
         pmra=0.0, pmdec=0.0, parallax=0.0, rv=0.0, zmeas=0.0,
-        epoch=2451545.0, tbase=0.0):
+        epoch=2451545.0, tbase=0.0, raunits='degrees'):
     """
     Query the web interface for barycorr.pro and compute the barycentric
     velocity correction.
@@ -46,7 +46,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     See also: http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.html
 
     :param jd_utc: Julian date (UTC)
-    :param ra: RA (J2000) [deg]
+    :param ra: RA (J2000) [deg/hours]
     :param dec: Dec (J2000) [deg]
     :param obsname: Observatory name (overrides coordinates if set)
     :param lat: Observatory latitude  [deg]
@@ -59,6 +59,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     :param zmeas: Measured redshift
     :param epoch: Epoch (default 2448348.56250, J2000)
     :param tbase: Baseline subtracted from times (default 0.0)
+    :param raunits: Unit of the RA value: 'degrees' (default) or 'hours'
     :return: Barycentric correction for zmeas
     """
 
@@ -78,6 +79,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
         'ZMEAS': '0.0',  # Applied manually below
         'EPOCH': epoch,
         'TBASE': tbase,
+        'RAUNITS': raunits,
     }
 
     # Set observatory
@@ -103,7 +105,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     return _c * ((1. + zmeas) * (1. + zb) - 1)  # Corrected velocity
 
 
-def utc2bjd(jd_utc, ra, dec):
+def utc2bjd(jd_utc, ra, dec, raunits='degrees'):
     """
     Query the web interface for utc2bjd.pro and compute the barycentric
     Julian Date for each value in jd_utc.
@@ -111,8 +113,9 @@ def utc2bjd(jd_utc, ra, dec):
     See also: http://astroutils.astronomy.ohio-state.edu/time/utc2bjd.html
 
     :param jd_utc: Julian date (UTC)
-    :param ra: RA (J2000) [deg]
+    :param ra: RA (J2000) [deg/hours]
     :param dec: Dec (J2000) [deg]
+    :param raunits: Unit of the RA value: 'degrees' (default) or 'hours'
     :return: BJD(TDB) at ~20 ms accuracy (observer at geocenter)
     """
 
@@ -125,7 +128,8 @@ def utc2bjd(jd_utc, ra, dec):
         'JDS': ','.join(map(repr, jd_utc)),
         'RA': ra,
         'DEC': dec,
-        'FUNCTION': 'utc2bjd'
+        'RAUNITS': raunits,
+        'FUNCTION': 'utc2bjd',
     }
 
     # Query the web server
@@ -136,7 +140,7 @@ def utc2bjd(jd_utc, ra, dec):
     )
 
 
-def bjd2utc(bjd_tdb, ra, dec):
+def bjd2utc(bjd_tdb, ra, dec, raunits='degrees'):
     """
     Query the web interface for bjd2utc.pro and compute the Julian Date (UTC)
     for each value in bjd_tdb.
@@ -144,8 +148,9 @@ def bjd2utc(bjd_tdb, ra, dec):
     See also: http://astroutils.astronomy.ohio-state.edu/time/utc2bjd.html
 
     :param bjd_tdb: Barycentric Julian Date (TDB)
-    :param ra: RA (J2000) [deg]
+    :param ra: RA (J2000) [deg/hours]
     :param dec: Dec (J2000) [deg]
+    :param raunits: Unit of the RA value: 'degrees' (default) or 'hours'
     :return: JD(UTC) at ~20 ms accuracy (observer at geocenter)
     """
 
@@ -158,7 +163,8 @@ def bjd2utc(bjd_tdb, ra, dec):
         'JDS': ','.join(map(repr, bjd_tdb)),
         'RA': ra,
         'DEC': dec,
-        'FUNCTION': 'bjd2utc'
+        'RAUNITS': raunits,
+        'FUNCTION': 'bjd2utc',
     }
 
     # Query the web server

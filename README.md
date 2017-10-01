@@ -49,3 +49,9 @@ barycorr.bvc(**params)
 
 # Returns: numpy.array([-1312.08186269,   515.87479325])
 ```
+
+## Version history
+##### Version 1.2 (01 Oct 2017)
+Allowed keyword `raunits` to switch between hours and degrees (courtesy of Mathias Zechmeister)
+##### Version 1.1 (26 May 2016)
+Initial release
