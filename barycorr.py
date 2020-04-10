@@ -2,10 +2,17 @@
 # Python 2 compatibility
 from __future__ import division
 
+import logging
+
 # Required packages
 import requests
 from numpy import array, ndarray
 
+try:
+    import requests_cache
+    requests_cache.install_cache('barycorr_cache')
+except ImportError:
+    logging.warning("couldn't import 'requests-cache', requests won't be cached.")
 
 """
 Python routines that query Jason Eastman's web applets for barycentric
