@@ -28,7 +28,6 @@ See also:
     http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 """
 
-__version__ = '1.2'
 __all__ = ['bvc', 'utc2bjd', 'bjd2utc']
 
 # Speed of light
