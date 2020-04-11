@@ -2,6 +2,7 @@
 # Python 2 compatibility
 from __future__ import division
 
+import datetime
 import logging
 import os.path
 import tempfile
@@ -14,6 +15,7 @@ try:
     import requests_cache
     requests_cache.install_cache(
         cache_name=os.path.join(tempfile.gettempdir(), 'barycorr_cache'),
+        expire_after=datetime.timedelta(days=1),
     )
 except ImportError:
     logging.warning("couldn't import 'requests-cache', requests won't be cached.")
