@@ -3,6 +3,8 @@
 from __future__ import division
 
 import logging
+import os.path
+import tempfile
 
 # Required packages
 import requests
@@ -10,7 +12,9 @@ from numpy import array, ndarray
 
 try:
     import requests_cache
-    requests_cache.install_cache('barycorr_cache')
+    requests_cache.install_cache(
+        cache_name=os.path.join(tempfile.gettempdir(), 'barycorr_cache'),
+    )
 except ImportError:
     logging.warning("couldn't import 'requests-cache', requests won't be cached.")
 
