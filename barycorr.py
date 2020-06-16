@@ -145,7 +145,7 @@ def bjd2utc(bjd_tdb, ra, dec, raunits='degrees'):
     Query the web interface for bjd2utc.pro and compute the Julian Date (UTC)
     for each value in bjd_tdb.
 
-    See also: http://astroutils.astronomy.ohio-state.edu/time/utc2bjd.html
+    See also: http://astroutils.astronomy.ohio-state.edu/time/bjd2utc.html
 
     :param bjd_tdb: Barycentric Julian Date (TDB)
     :param ra: RA (J2000) [deg/hours]
