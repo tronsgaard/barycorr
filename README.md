@@ -55,6 +55,8 @@ barycorr.bvc(**params)
 ```
 
 ## Version history
+##### Version 1.3 (16 June 2020)
+Added cache functionality (courtesy of @vterron)
 ##### Version 1.2 (01 Oct 2017)
 Allowed keyword `raunits` to switch between hours and degrees (courtesy of Mathias Zechmeister)
 ##### Version 1.1 (26 May 2016)
