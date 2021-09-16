@@ -203,7 +203,14 @@ def _query_webserver(server_url, params, expected_length):
 
     # Convert multiline string output to numpy float array
     try:
-        result = [float(x) for x in r.text.splitlines() if len(x) > 0]
+        result = []
+        for x in r.text.splitlines():
+            if len(x) == 0:
+                continue
+            try:
+                result.append(float(x))
+            except ValueError:
+                print(x)  # Propagate warning from barycorr, e.g. outdated leap second file
         if len(result) != expected_length:
             raise BarycorrError(
                 'Unexpected length of result\n{}'.format(r.url)
