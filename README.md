@@ -55,6 +55,8 @@ barycorr.bvc(**params)
 ```
 
 ## Version history
+##### Version 1.4 (16 September 2021)
+Added unit test and prevent the code from crashing when there is a warning about outdated leap second file.
 ##### Version 1.3 (16 June 2020)
 Added cache functionality (courtesy of @vterron)
 ##### Version 1.2 (01 Oct 2017)
