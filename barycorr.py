@@ -148,7 +148,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     return _c * ((1. + zmeas) * (1. + zb) - 1)  # Corrected velocity
 
 
-def utc2bjd(jd_utc, ra, dec, raunits='degrees'):
+def utc2bjd(jd_utc, ra, dec, raunits='degrees', localmode=False):
     """
     Query the web interface for utc2bjd.pro and compute the barycentric
     Julian Date for each value in jd_utc.
@@ -159,6 +159,7 @@ def utc2bjd(jd_utc, ra, dec, raunits='degrees'):
     :param ra: RA (J2000) [deg/hours]
     :param dec: Dec (J2000) [deg]
     :param raunits: Unit of the RA value: 'degrees' (default) or 'hours'
+    :param localmode: Compute locally using barycorrpy instead of web service
     :return: BJD(TDB) at ~20 ms accuracy (observer at geocenter)
     """
 
@@ -175,12 +176,41 @@ def utc2bjd(jd_utc, ra, dec, raunits='degrees'):
         'FUNCTION': 'utc2bjd',
     }
 
-    # Query the web server
-    return _query_webserver(
-        'http://astroutils.astronomy.ohio-state.edu/time/convert.php',
-        params,
-        len(jd_utc)
-    )
+    if localmode is True:
+        # Use local installation of barycorrpy to compute the barycentric correction
+        try:
+            from barycorrpy import utc_tdb
+            from astropy.coordinates import Angle  # astropy is a requirement of barycorrpy
+            from astropy.time import Time
+        except ImportError:
+            raise BarycorrError('To use local mode, please install package `barycorrpy`.')
+        
+        # Suppress warning about not using astropy time object
+        jd_utc = Time(jd_utc, format='jd', scale='utc')
+
+        # Parse star coordinates
+        # (Could be formatted as "HH MM SS.S", "DD MM SS.S", or "DD.DDD")
+        if raunits == 'hours':
+            ra = Angle(ra, unit='hour').deg
+        else:
+            ra = Angle(ra, unit='deg').deg
+        dec = Angle(dec, unit='deg').deg
+
+        result, messages, status = utc_tdb.JDUTC_to_BJDTDB(jd_utc, ra=ra, dec=dec)
+        if status == 2:
+            raise BarycorrError('barycorrpy encountered an error: ' + repr(messages))
+        else:
+            for msg in messages:
+                if len(msg) > 0:
+                    print(msg)
+        return result
+    else:
+        # Query the web server
+        return _query_webserver(
+            'http://astroutils.astronomy.ohio-state.edu/time/convert.php',
+            params,
+            len(jd_utc)
+        )
 
 
 def bjd2utc(bjd_tdb, ra, dec, raunits='degrees'):
