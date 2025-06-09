@@ -1,5 +1,7 @@
 # barycorr.py
 
+> **_NOTE:_**  A full Python implementation of the barycentric correction algorighms now exists in the form of [barycorrpy](https://github.com/shbhuk/barycorrpy/), which runs locally without invoking any web applets. Please consider using their code directly instead, or call it seamlessly through this Python package using the keyword argument `localmode=True`.
+
 Python routines that query Jason Eastman's web applets for barycentric
 velocity and time correction (
 [`barycorr.pro`](http://astroutils.astronomy.ohio-state.edu/exofast/pro/exofast/bary/barycorr.pro), 
