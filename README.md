@@ -11,9 +11,9 @@ corresponding paper:
 
 - [Wright and Eastman (2014), PASP 126, pp. 838–852](http://adsabs.harvard.edu/abs/2014PASP..126..838W) [BVC calculation]
 - [Eastman et al. (2010), PASP 122, pp. 935–946](http://adsabs.harvard.edu/abs/2010PASP..122..935E) [BJD calculations]
+- [Kanodia and Wright (2018), Res. Notes AAS 2, 4](https://ui.adsabs.harvard.edu/abs/2018RNAAS...2....4K/) [localmode]
 
-The Python interface is written by René Tronsgaard (Aarhus University) and may
-be used, modified or redistributed without restrictions.
+The Python interface is written by René Tronsgaard and may be used, modified or redistributed without restrictions.
 
 See also: 
 - http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.html
@@ -31,13 +31,14 @@ The following packages are required (available in PyPI):
 Recommended:
 
 - [`requests-cache`](https://pypi.org/project/requests-cache/)
+- [`barycorrpy`](https://pypi.org/project/barycorrpy/)
 
 ## Usage example
 
 ```python
 import barycorr
 params = {
-    'jd_utc': [2457535.067362, 2457462.12724721],
+    'jd_utc': [2457462.12724721, 2457535.067362],
     'ra': 293.08995940,
     'dec':  69.66117649,
     'lat': 28.2983,
@@ -47,14 +48,16 @@ params = {
     'pmdec': -1738.40,
     'parallax': 173.77,
     'rv': 26780,
-    'zmeas': [-4.99432219e-06,  1.16637407e-05]
+    'zmeas': [1.16637407e-05, -4.99432219e-06]
 }
 barycorr.bvc(**params)
 
-# Returns: numpy.array([-1312.08186269,   515.87479325])
+# Returns: numpy.array([ 515.87479898, 1047.21353446])
 ```
 
 ## Version history
+##### Version 1.5 (09 June 2025)
+Added "localmode" that calls [barycorrpy](https://github.com/shbhuk/barycorrpy/) as a fallback option.
 ##### Version 1.4 (16 September 2021)
 Added unit test and prevent the code from crashing when there is a warning about outdated leap second file.
 ##### Version 1.3 (16 June 2020)

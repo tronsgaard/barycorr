@@ -49,7 +49,7 @@ _c = 299792458.
 
 def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
         pmra=0.0, pmdec=0.0, parallax=0.0, rv=0.0, zmeas=0.0,
-        epoch=2451545.0, tbase=0.0, raunits='degrees'):
+        epoch=2451545.0, tbase=0.0, raunits='degrees', localmode=False):
     """
     Query the web interface for barycorr.pro and compute the barycentric
     velocity correction.
@@ -72,6 +72,7 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     :param epoch: Epoch (default 2448348.56250, J2000)
     :param tbase: Baseline subtracted from times (default 0.0)
     :param raunits: Unit of the RA value: 'degrees' (default) or 'hours'
+    :param localmode: Compute locally using barycorrpy instead of web service
     :return: Barycentric correction for zmeas
     """
 
@@ -104,12 +105,42 @@ def bvc(jd_utc, ra, dec, obsname=None, lat=None, lon=None, elevation=None,
     else:
         raise BarycorrError('Observatory location not set')
 
-    # Query the web server
-    result = _query_webserver(
-        'http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.php',
-        params,
-        len(jd_utc)
-    )
+    
+    if localmode is True:
+        # Use local installation of barycorrpy to compute the barycentric correction
+        try:
+            from barycorrpy import get_BC_vel
+            from astropy.coordinates import Angle  # astropy is a requirement of barycorrpy
+            from astropy.time import Time
+        except ImportError:
+            raise BarycorrError('To use local mode, please install package `barycorrpy`.')
+        
+        # Suppress warning about not using astropy time object
+        jd_utc = Time(jd_utc, format='jd', scale='utc')
+
+        # Parse star coordinates
+        # (Could be formatted as "HH MM SS.S", "DD MM SS.S", or "DD.DDD")
+        if raunits == 'hours':
+            ra = Angle(ra, unit='hour').deg
+        else:
+            ra = Angle(ra, unit='deg').deg
+        dec = Angle(dec, unit='deg').deg
+
+        result, messages, status = get_BC_vel(JDUTC=jd_utc, ra=ra, dec=dec, epoch=epoch, pmra=pmra, pmdec=pmdec, px=parallax, rv=rv, 
+                            obsname=obsname, lat=lat, longi=lon, alt=elevation, zmeas=0.0, predictive=False)
+        if status == 2:
+            raise BarycorrError('barycorrpy encountered an error: ' + repr(messages))
+        else:
+            for msg in messages:
+                if len(msg) > 0:
+                    print(msg)
+    else:
+        # Query the web server
+        result = _query_webserver(
+            'http://astroutils.astronomy.ohio-state.edu/exofast/barycorr.php',
+            params,
+            len(jd_utc)
+        )
 
     # Apply the correction (workaround to allow multiple values for z_meas)
     zmeas = array(zmeas)
